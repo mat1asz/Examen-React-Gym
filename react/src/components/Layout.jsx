@@ -1,5 +1,5 @@
 // PASO 1 · COPIAR (ya anda con lo provisorio)  ·  PASO 4 · PEGAR HTML (header, saludo, footer)
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { LoginForm } from "./LoginForm.jsx";
 
@@ -17,7 +17,7 @@ export function Layout({ children }) {
     <>
       <div id="userInfo">
         <span id="userNameDisplay">
-          Bienvenido, {user.fullname} - {user.rol}
+          Bienvenido, {user.fullName} - {user.rol}
         </span>
         <button
           id="logoutBtn"
@@ -42,7 +42,7 @@ export function Layout({ children }) {
         <div className="login-container" id="login-container">
           {areaLogin}
         </div>
-      </header>
+      </header> <main className="">{children}</main>
       <footer>
         <p>
           🍻 Birra y Bíceps © 2025 - Gimnasio con Actitud | Bebe con

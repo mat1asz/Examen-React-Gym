@@ -50,7 +50,12 @@ export function HomePage() {
           ));
           return (
             <Fragment key={grupo}>
-
+                            <article className="categoria">
+                <h2>🍺 {grupo}</h2>
+                <div className="clases-grid" id={`grid-${grupo}`}>
+                  {tarjetas}
+                </div>
+              </article>
             </Fragment>
           );
         })}

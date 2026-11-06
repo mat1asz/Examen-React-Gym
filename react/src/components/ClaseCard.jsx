@@ -1,6 +1,6 @@
 // PASO 2 · REEMPLAZAR (ya anda con lo provisorio)  ·  PASO 4 · PEGAR HTML (la tarjeta)
 import { Link } from "react-router-dom";
-import { VerDatos } from "./VerDatos.jsx";
+
 
 export function ClaseCard({ clase, grupo }) {
   return (
@@ -8,7 +8,7 @@ export function ClaseCard({ clase, grupo }) {
        <div className="card">
                     <Link to={`/clases/${clase.id}`}>
                         <div className="card-picture">
-                            <img src="{clase.imagen}" alt="{clase.nombre}" title="{clase.nombre}" />
+                            <img src={clase.imagen} alt={clase.nombre} title={clase.nombre} />
                             <div className="card-badge">{clase.categoria}</div>
                         </div>
                         <div className="card-content">
