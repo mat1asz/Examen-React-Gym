@@ -1,82 +1,63 @@
-import { useParams } from "react-router-dom";
+// PASO 2 · REEMPLAZAR  ·  PASO 4 · PEGAR HTML (el detalle)
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { apiFetch } from "../api/client.js";
+import { VerDatos } from "../components/VerDatos.jsx";
 
-// Página de detalle de un videojuego.
-//
-// MUY IMPORTANTE :
-// - Aquí solo se deja la estructura de estados y el esqueleto visual.
-// - Toda la lógica de:
-//    * Llamar a la API para obtener el detalle (`/api/videojuegos/:id`),
-//    * Llamar a la API para obtener todas las plataformas y deducir la del juego,
-//    * Manejar estados de carga, error y juego no encontrado.
-//
-// Pista:
-// - Inspírate en `juego.html` y `js/juego.js` de la versión vanilla.
-
-export function GameDetailPage() {
+export function ClaseDetailPage() {
   const { id } = useParams();
-  const [game, setGame] = useState(null);
-  const [platform, setPlatform] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [clase, setClase] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // No se toca: también trae la lista completa, por si el detalle muestra un dato que solo está ahí
+  const [lista, setLista] = useState(null);
   useEffect(() => {
-    // TODO:
-    // - Usar aquí tu helper de API para:
-    //   1) Obtener el juego por id.
-    //   2) Obtener todos los juegos y deducir a qué plataforma pertenece.
-    // - Actualizar `game`, `platform`, `loading` y `error` según corresponda.
-    console.warn(
-      "TODO: implementar carga de detalle de videojuego en GameDetailPage",
-    );
+    apiFetch("/clases")
+      .then(setLista)
+      .catch(() => setLista(null));
+  }, []);
+
+  useEffect(() => {
+    async function cargar() {
+      try {
+        setLoading(true);
+        setError(null);
+        const datos = await apiFetch(`/clases/${id}`);
+        setClase(datos);
+      } catch (e) {
+        setError(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    cargar();
   }, [id]);
 
+  if (loading) {
+    return (
+      <article className="container loading">
+        <div className="loader"></div>
+      </article>
+    );
+  }
+
+  if (error || !clase) {
+    return (
+      <article className="container">
+        <p className="error">{error ? error.message : "No encontrado"}</p>
+        <Link to="/">Volver al inicio</Link>
+      </article>
+    );
+  }
+
   return (
-    <section>
-      <h1>Detalle de videojuego (React)</h1>
-      <p>
-        Página de detalle para el juego con id: <strong>{id}</strong>
-      </p>
-
-      {/* TODO:
-          - Sustituir este bloque por una versión completa que muestre:
-            * Imagen del juego.
-            * Desarrollador, año, género, calificación.
-            * Plataforma deducida.
-            * Requisitos del sistema.
-            * Modos de juego.
-            * Características.
-            * DLCs incluidos (si los hay).
-          - Manejar visualmente los casos de:
-            * loading === true
-            * error !== null
-            * game === null (juego no encontrado)
-      */}
-
-      <pre
-        style={{
-          marginTop: "1.5rem",
-          padding: "1rem",
-          background: "rgba(0,0,0,0.4)",
-        }}
-      >
-        <code>
-          {`// Ejemplo de estructura de datos esperada (simplificada):
-// {
-//   "id": 1,
-//   "nombre": "Juego X",
-//   "desarrollador": "Estudio Y",
-//   "año": 2023,
-//   "genero": "Acción",
-//   "calificacion": 9,
-//   "descripcion": "...",
-//   "requisitos_sistema": { ... },
-//   "modos_juego": ["Singleplayer", "Multiplayer"],
-//   "caracteristicas": ["...", "..."],
-//   "dlcs_incluidos": [ ... ]
-// }`}
-        </code>
-      </pre>
-    </section>
+    <>
+    <main className="clase-page-container">
+        <a href="/" className="back-btn">⬅ Volver al catálogo</a>
+        <div id="clase-details-container">
+        </div>
+    </main>
+    </>
   );
 }
